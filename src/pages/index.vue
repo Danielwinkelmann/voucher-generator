@@ -1,11 +1,19 @@
 <template>
   <div>
     <h1
-      class="font-extrabold text-8xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-red-500"
+      class="font-extrabold text-5xl sm:text-8xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-red-500"
     >
       Voucher Generator
     </h1>
-    <ul>
+    <div class="flex justify-center w-full space-x-4 mt-4 mx-auto">
+      <button class="bg-teal-400 hover:bg-teal-500 text-teal-100 rounded-lg px-2 py-1" @click="generateVouchers">
+        generate
+      </button>
+      <button class="bg-red-400 hover:bg-red-500 text-teal-100 rounded-lg px-2 py-1" @click="vouchers = []">
+        clear
+      </button>
+    </div>
+    <!--   <ul>
       <li>combinationPossible: {{ combinationPossible }}</li>
       <li>customCharSet: <input v-model="customCharSet" type="text"></li>
       <li>customPattern: <input v-model="customPattern" type="text"></li>
@@ -31,7 +39,7 @@
           generate
         </button>
       </li>
-    </ul>
+    </ul> -->
     <ul class="grid grid-cols-5 gap-4 mt-8">
       <li v-for="voucher of vouchers" :key="voucher" class="bg-slate-300 p-2 rounded-lg font-bold">
         {{ voucher }}
