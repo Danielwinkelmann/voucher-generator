@@ -67,6 +67,7 @@
     <input v-model="separatedSymbol" type="text">
     <textarea v-model="blackListTextArea" rows="5" type="text" />
     <pre>generatedPattern:{{ customPattern }}</pre>
+    <input accept=".csv" type="file" @change="onFileSelect">
     <button @click="clipboard()">
       Copy
     </button>
@@ -76,6 +77,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 const { copy } = useClipboard()
+
 const blackListTextArea = ref('')
 const separatedSymbol = ref('\n')
 const blackList: Ref<string[]> = ref([])
@@ -99,7 +101,18 @@ const charSetSimilar = 'Oo0iIl'
 
 const clipboard = () => copy(vouchers.value.join(separatedSymbol.value))
 watch(blackListTextArea, () => blackList.value = blackListTextArea.value.split(separatedSymbol.value))
-
+const onFileSelect = (event: any) => {
+  const reader = new FileReader()
+  const files: FileList = event.target.files
+  if (files.length > 0) {
+    const file: File = files[0]
+    reader.readAsBinaryString(file)
+    reader.onload = function(e) {
+      const data: string[] = (e!.target!.result! as string).split('\n')
+      blackListTextArea.value = data.slice(data[0].length === data[1].length ? 0 : 1, data.length - 1).join('\n')
+    }
+  }
+}
 const characters = computed(() => {
   const similarRegExp = new RegExp(`[${charSetSimilar}]`, 'gm')
   if (customCharSet.value) return customCharSet.value.replace(/\s/g, '')
